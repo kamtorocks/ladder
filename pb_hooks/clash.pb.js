@@ -56,7 +56,8 @@ routerAdd("GET", "/clash", (e) => {
 
   const headers = e.response.header();
   headers.set("Content-Type", "application/x-yaml; charset=utf-8");
-  headers.set("Content-Disposition", 'attachment; filename="clash.yaml"');
+  // 文件名不加引号：部分 Clash 客户端会把引号当成名字的一部分
+  headers.set("Content-Disposition", "attachment; filename=ladder.yaml");
   headers.set("Profile-Update-Interval", "24");
   headers.set("Cache-Control", "no-cache");
   headers.set("Access-Control-Allow-Origin", "*");
