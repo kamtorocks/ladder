@@ -1,6 +1,6 @@
-# 服务器部署用（lax.leen.in:/root/ladder/docker-compose.yaml）
-# 不映射端口，仅加入 discovery 网络，由 Nginx Proxy Manager 反代：
-#   ladder.leen.in -> http://ladder:8090
+# 部署用 compose：不映射宿主机端口，仅加入外部网络 discovery，
+# 由同网络内的网关反代到 http://ladder:8090。
+# 含密钥的变量（如 CLASH_TOKEN）放在同目录 .env 中，不入库。
 services:
   ladder:
     image: ghcr.io/kamtorocks/ladder:latest
