@@ -1,6 +1,6 @@
 # 服务器部署用（lax.leen.in:/root/ladder/docker-compose.yaml）
 # 不映射端口，仅加入 discovery 网络，由 Nginx Proxy Manager 反代：
-#   clash.leen.in -> http://ladder:8090
+#   ladder.leen.in -> http://ladder:8090
 services:
   ladder:
     image: ghcr.io/kamtorocks/ladder:latest

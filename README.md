@@ -49,7 +49,7 @@ docker exec ladder /pb/pocketbase superuser upsert you@example.com 'your-passwor
 
 本地一键：`pnpm deploy`（即 `scripts/deploy.sh`）。
 
-Nginx Proxy Manager 新建 Proxy Host：`clash.leen.in` → `http://ladder:8090`，开启 SSL。
+Nginx Proxy Manager 新建 Proxy Host：`ladder.leen.in` → `http://ladder:8090`，开启 SSL。
 
 可选环境变量 `CLASH_TOKEN`：设置后订阅地址需为 `/clash?token=xxx`。
 

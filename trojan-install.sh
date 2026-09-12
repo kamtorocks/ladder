@@ -3,7 +3,7 @@
 read -p "Please input DOMAIN: " DOMAIN
 read -p "Please input CF_Email: " CF_Email
 read -p "Please input CF_Key: " CF_Key
-read -p "Please input LADDER_URL (e.g. https://clash.leen.in): " LADDER_URL
+read -p "Please input LADDER_URL (e.g. https://ladder.leen.in): " LADDER_URL
 read -p "Please input LADDER_EMAIL (PocketBase superuser): " LADDER_EMAIL
 read -s -p "Please input LADDER_PASSWORD: " LADDER_PASSWORD; echo
 
