@@ -1,9 +1,9 @@
 # ladder
 
-Clash 订阅配置服务，基于 [PocketBase](https://pocketbase.io) 单容器部署（替代原 Supabase Functions 方案）。
+Clash 订阅配置服务，基于 [PocketBase](https://pocketbase.io) 单容器部署。
 
 - `GET /clash` —— 输出 Clash YAML 订阅（proxies / proxy-groups / rules / rule-providers）
-- `GET /clash-rules/xxx.txt` —— 规则文件下载；`/` 为目录索引页；`/healthz` 为同步状态（原 sync-oss 服务）
+- `GET /clash-rules/xxx.txt` —— 规则文件下载；`/` 为目录索引页；`/healthz` 为同步状态
 - `/_/` —— PocketBase 后台，可视化增删改 proxies / rules / rule_providers / sync_resources
 - 数据存放在 SQLite（`pb_data/`），表结构由 `pb_migrations/` 版本化管理
 
@@ -13,7 +13,7 @@ Clash 订阅配置服务，基于 [PocketBase](https://pocketbase.io) 单容器�
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/hysteria-install.sh)"
 ```
 
-需 root 运行。交互输入：域名、Cloudflare API Token（Zone:Read + DNS:Edit）、ACME 邮箱、可选的伪装反代地址、ladder 后台账号。脚本会：
+需 root 运行。交互输入：域名、Cloudflare API Token（Zone:Read + DNS:Edit）、ACME 邮箱、可选的伪装反代地址、ladder 服务地址与后台账号。脚本会：
 
 1. 在 Cloudflare 创建/更新 A 记录指向本机（DNS only）
 2. 用官方脚本安装 hysteria2，证书由内置 ACME 通过 Cloudflare DNS 验证签发
@@ -33,7 +33,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/h
 | `pb_hooks/sync.pb.js` | 规则文件定时同步 + 文件目录服务（`/healthz`、`POST /api/sync`、`/...`） |
 | `pb_hooks/lib/sync.js` | 下载（临时文件 + 原子替换）、目录索引渲染 |
 | `Dockerfile` | alpine + pocketbase 二进制 + hooks/migrations |
-| `docker-compose.yml` | 服务器部署文件（加入 `discovery` 网络，由 NPM 反代） |
+| `docker-compose.yml` | 部署文件（不映射端口，加入外部网络 `discovery`，由网关反代到 `ladder:8090`） |
 | `scripts/deploy.sh` | 拉取最新镜像并重启 |
 | `hysteria-install.sh` | hysteria2 节点一键安装并注册到本服务 |
 
@@ -58,7 +58,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/h
 
 镜像由 GitHub Actions 构建并推送到 `ghcr.io/kamtorocks/ladder:latest`（push 到 `main` 或打 `v*` tag 触发）。
 
-服务器（`lax.leen.in:/root/ladder`）：
+服务器上：
 
 ```sh
 docker compose pull && docker compose up -d
@@ -66,11 +66,16 @@ docker compose pull && docker compose up -d
 docker exec ladder /pb/pocketbase superuser upsert you@example.com 'your-password' --dir=/pb/pb_data
 ```
 
-本地一键：`pnpm deploy`（即 `scripts/deploy.sh`）。
+本地一键：`pnpm deploy`（即 `scripts/deploy.sh`，可用 `DEPLOY_HOST` / `DEPLOY_DIR` 指定目标）。
 
-Nginx Proxy Manager 新建 Proxy Host：`ladder.leen.in` → `http://ladder:8090`，开启 SSL。
+环境变量：
 
-可选环境变量 `CLASH_TOKEN`：设置后订阅地址需为 `/clash?token=xxx`。
+| 变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `CLASH_TOKEN` | 空 | 设置后订阅地址需为 `/clash?token=xxx` |
+| `SYNC_CRON` | `0 18 * * *` | 规则文件同步时间（UTC） |
+| `SYNC_ON_START` | `true` | 启动后是否先同步一次 |
+| `DOWNLOAD_TIMEOUT` | `120` | 单个文件下载超时（秒） |
 
 ## 本地开发
 
