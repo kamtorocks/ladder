@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "dev": "pocketbase serve --http=127.0.0.1:8090 --migrationsDir=pb_migrations --hooksDir=pb_hooks",
-    "migrate:supabase": "node scripts/migrate-from-supabase.mjs",
     "deploy": "sh scripts/deploy.sh"
   },
   "engines": {
