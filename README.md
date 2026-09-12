@@ -68,6 +68,8 @@ docker exec ladder /pb/pocketbase superuser upsert you@example.com 'your-passwor
 
 本地一键：`pnpm deploy`（即 `scripts/deploy.sh`，可用 `DEPLOY_HOST` / `DEPLOY_DIR` 指定目标）。
 
+含密钥的配置放在服务器部署目录的 `.env` 里（不入库），compose 会自动读取，例如 `CLASH_TOKEN=xxx`。
+
 环境变量：
 
 | 变量 | 默认值 | 说明 |

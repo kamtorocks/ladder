@@ -8,8 +8,8 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Asia/Shanghai
-      # 设置后订阅地址需带 ?token=xxx（不设则公开）
-      # - CLASH_TOKEN=change-me
+      # 订阅访问令牌，从同目录 .env 读取（CLASH_TOKEN=xxx）；设置后订阅地址需带 ?token=xxx，不设则公开
+      - CLASH_TOKEN=${CLASH_TOKEN:-}
       # 规则文件定时同步（cron 按 UTC 计算，18:00 UTC = 北京时间 02:00）
       - SYNC_CRON=0 18 * * *
       # 启动后 1 分钟内先同步一次
