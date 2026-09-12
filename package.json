@@ -1,15 +1,15 @@
 {
   "name": "ladder",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Clash subscription service on PocketBase",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pocketbase serve --http=127.0.0.1:8090 --migrationsDir=pb_migrations --hooksDir=pb_hooks",
+    "migrate:supabase": "node scripts/migrate-from-supabase.mjs",
+    "deploy": "sh scripts/deploy.sh"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "supabase": "^1.50.4"
+  "engines": {
+    "node": ">=18"
   }
 }

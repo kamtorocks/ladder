@@ -1,0 +1,26 @@
+# 服务器部署用（lax.leen.in:/root/ladder/docker-compose.yaml）
+# 不映射端口，仅加入 discovery 网络，由 Nginx Proxy Manager 反代：
+#   clash.leen.in -> http://ladder:8090
+services:
+  ladder:
+    image: ghcr.io/kamtorocks/ladder:latest
+    container_name: ladder
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+      # 设置后订阅地址需带 ?token=xxx（不设则公开）
+      # - CLASH_TOKEN=change-me
+    volumes:
+      - ./pb_data:/pb/pb_data
+    expose:
+      - "8090"
+    networks:
+      - discovery
+    deploy:
+      resources:
+        limits:
+          memory: 192M
+
+networks:
+  discovery:
+    external: true
