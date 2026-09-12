@@ -6,13 +6,21 @@ Clash 订阅配置服务，基于 [PocketBase](https://pocketbase.io) 单容器�
 - `/_/` —— PocketBase 后台，可视化增删改 proxies / rules / rule_providers
 - 数据存放在 SQLite（`pb_data/`），表结构由 `pb_migrations/` 版本化管理
 
-## Trojan 节点一键安装
+## Hysteria2 节点一键安装
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/trojan-install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/hysteria-install.sh)"
 ```
 
-安装完成后会把节点自动注册到本服务的 `proxies` 表（需要后台管理员账号）。
+需 root 运行。交互输入：域名、Cloudflare API Token（Zone:Read + DNS:Edit）、ACME 邮箱、可选的伪装反代地址、ladder 后台账号。脚本会：
+
+1. 在 Cloudflare 创建/更新 A 记录指向本机（DNS only）
+2. 用官方脚本安装 hysteria2，证书由内置 ACME 通过 Cloudflare DNS 验证签发
+3. 80/443 伪装为 coming-soon 静态页（或反代到你指定的地址）
+4. 配置每日重启 timer
+5. 把节点注册到本服务的 `proxies` 表（同名则更新）
+
+每次运行都会重新生成密码。若启用了 ufw，需放行 `443/udp` 与 `80,443/tcp`。
 
 ## 目录
 
@@ -25,7 +33,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/kamtorocks/ladder/main/t
 | `docker-compose.yml` | 服务器部署文件（加入 `discovery` 网络，由 NPM 反代） |
 | `scripts/migrate-from-supabase.mjs` | 一次性从 Supabase 导入数据 |
 | `scripts/deploy.sh` | 拉取最新镜像并重启 |
-| `trojan-install.sh` | trojan-go 节点一键安装并注册到本服务 |
+| `hysteria-install.sh` | hysteria2 节点一键安装并注册到本服务 |
 
 ## 数据模型
 
