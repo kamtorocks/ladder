@@ -60,9 +60,7 @@ if [ -z "$MASQUERADE_URL" ]; then
 fi
 
 # ---------- 安装 hysteria2（官方脚本，重复执行即升级） ----------
-if ! command -v hysteria >/dev/null 2>&1; then
-    bash -c "$(curl -fsSL https://get.hy2.sh/)"
-fi
+bash <(curl -fsSL https://get.hy2.sh/)
 
 RANDOM_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c16)
 
